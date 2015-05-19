@@ -1,4 +1,5 @@
 misplacebook/
 hockey/
-imdb/
 learn/
+*.out
+*.xlsx

@@ -1,5 +1,9 @@
 misplacebook/
 hockey/
 learn/
+maps/
+crossfit/
 *.out
 *.xlsx
+*.pyc
+*.ipynb_checkpoints/

@@ -10,6 +10,9 @@ def cleanup(filein):
     df['year'] = df['year'].apply(lambda x: int(x[1:5]))
     #Genres are split by a pipe
     df['genre'] = df['genre'].apply(lambda x: str(x).split('|'))
+    #Do something about rank
+    df['rank'] = df['rank'].apply(lambda x: int(x[0:-1]))
+
      
     return df
 

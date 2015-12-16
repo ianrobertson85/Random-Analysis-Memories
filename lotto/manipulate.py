@@ -4,6 +4,8 @@ Manipulates some files to pull out the winning numbers.
 
 from bs4 import BeautifulSoup
 import os
+import glob
+import re
 
 def handle_file(filename):
     txt = open(filename).read()
@@ -11,8 +13,8 @@ def handle_file(filename):
     soup = BeautifulSoup(txt)
     dicto = {}
 
-    dl = soup.dl
-    for tr in soup.dl.find_all('tr')[1::]:
+    #Change to finding the 6 + bonus because I think it's unique.
+    for tr in soup(text = '6 + bonus')[0].parent.parent.parent.find_all('tr'):
         match = tr.find_all('td')[0].text
         if match == '3 + bonus':
             match = '3_bonus'
@@ -34,11 +36,13 @@ def handle_file(filename):
     dicto['jackpot'] = dicto['7_prize'] + dicto['millions'] * 1000000
 
     try:
-        sales = soup.find('em', text='Total Sales').parent.nextSibling.nextSibling.nextSibling.text
+        sales = soup.find('td', text=re.compile('Total Sales')).findNext('td').text.strip()
         sales = int(float(sales.replace(',', '').replace('$', '')) / 5)
+        print 'found total sales'
     except:
         #There's a couple times where the total sales is missing.  Use odds of hitting 3 numbers there.
         sales = dicto['3_winners'] * 8.1
+        print 'no find total sales'
     dicto['sales'] = sales
 
     return dicto
@@ -46,7 +50,7 @@ def handle_file(filename):
 if __name__ == '__main__':
     overall_dict = {}
 
-    for filename in ['files/' + f for f in os.listdir('files')]:
+    for filename in glob.glob('files/*html'):
         d = filename[6:16]
         print d,
         overall_dict[d] = handle_file(filename)

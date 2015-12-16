@@ -4,7 +4,7 @@ import time
 
 first_date = datetime.date(2009, 12, 18)
 last_date = datetime.date.today()
-delay = 20
+delay = 6
 
 ranger = (last_date - first_date).days / 7
 
